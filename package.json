@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
+    "dropbox": "^10.34.0",
     "fast-xml-parser": "^4.3.3",
     "googleapis": "^131.0.0",
     "nitropack": "latest"

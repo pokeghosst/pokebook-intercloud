@@ -18,22 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { GoogleDriveClient } from '../../../lib/client/GoogleDriveClient';
 
-import { StorageProvider } from '../../../lib/enums/StorageProvider';
-
 export default defineEventHandler(async (event) => {
-	const provider = getRouterParam(event, 'provider');
+	const accessToken = getHeader(event, 'Authorization');
 
-	try {
-		switch (provider) {
-			case StorageProvider.DROPBOX: {
-			}
-			case StorageProvider.GOOGLE: {
-				return new Response(await GoogleDriveClient.getAuthUrl());
-			}
-			default:
-				return new Response('', { status: 400 });
-		}
-	} catch (e) {
-		return new Response('', { status: 500 });
-	}
+	return { pokebookFolderId: await GoogleDriveClient.getPokeBookFolderId(accessToken) };
 });

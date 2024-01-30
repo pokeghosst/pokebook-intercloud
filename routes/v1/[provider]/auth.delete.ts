@@ -22,13 +22,15 @@ import { StorageProvider } from '../../../lib/enums/StorageProvider';
 
 export default defineEventHandler(async (event) => {
 	const provider = getRouterParam(event, 'provider');
+	const refreshTokenId = getHeader(event, 'Authorization');
 
 	try {
 		switch (provider) {
-			case StorageProvider.DROPBOX: {
-			}
+			case StorageProvider.DROPBOX:
+			// return json(await DropboxClient.revokeTokenAndLogOut(refreshTokenId));
 			case StorageProvider.GOOGLE: {
-				return new Response(await GoogleDriveClient.getAuthUrl());
+				await GoogleDriveClient.revokeTokenAndLogOut(refreshTokenId);
+				return new Response('', { status: 200 });
 			}
 			default:
 				return new Response('', { status: 400 });

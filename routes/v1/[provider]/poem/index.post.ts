@@ -16,24 +16,29 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { GoogleDriveClient } from '../../../lib/client/GoogleDriveClient';
+import { GoogleDriveClient } from '../../../../lib/client/GoogleDriveClient';
 
-import { StorageProvider } from '../../../lib/enums/StorageProvider';
+import { PoemEntity } from '../../../../lib/types/PoemEntity';
+
+import { StorageProvider } from '../../../../lib/enums/StorageProvider';
 
 export default defineEventHandler(async (event) => {
 	const provider = getRouterParam(event, 'provider');
+	const accessToken = getHeader(event, 'Authorization');
 
-	try {
-		switch (provider) {
-			case StorageProvider.DROPBOX: {
-			}
-			case StorageProvider.GOOGLE: {
-				return new Response(await GoogleDriveClient.getAuthUrl());
-			}
-			default:
-				return new Response('', { status: 400 });
+	const poem = (await readBody(event)) as PoemEntity;
+
+	switch (provider) {
+		case StorageProvider.DROPBOX:
+			// await DropboxClient.savePoem(accessToken, poem);
+			break;
+		case StorageProvider.GOOGLE: {
+			const pokebookFolderId = getQuery(event).pokebookFolderId as string;
+			await GoogleDriveClient.savePoem(accessToken, pokebookFolderId, poem);
+			break;
 		}
-	} catch (e) {
-		return new Response('', { status: 500 });
+		default:
+			return new Response('', { status: 400 });
 	}
+	return new Response(null, { status: 200 });
 });

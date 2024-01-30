@@ -22,18 +22,15 @@ import { StorageProvider } from '../../../lib/enums/StorageProvider';
 
 export default defineEventHandler(async (event) => {
 	const provider = getRouterParam(event, 'provider');
+	const code = getHeader(event, 'Authorization');
 
-	try {
-		switch (provider) {
-			case StorageProvider.DROPBOX: {
-			}
-			case StorageProvider.GOOGLE: {
-				return new Response(await GoogleDriveClient.getAuthUrl());
-			}
-			default:
-				return new Response('', { status: 400 });
+	switch (provider) {
+		case StorageProvider.DROPBOX:
+		// return json(await DropboxClient.processCallback(code));
+		case StorageProvider.GOOGLE: {
+			return await GoogleDriveClient.processCallback(code);
 		}
-	} catch (e) {
-		return new Response('', { status: 500 });
+		default:
+			return new Response('', { status: 400 });
 	}
 });

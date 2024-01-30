@@ -5,6 +5,16 @@ export default defineNitroConfig({
 			port: 0,
 			password: ''
 		},
-		pokebookFolderName: ''
+		google: {
+			clientId: '',
+			clientSecret: ''
+		},
+		dropbox: {
+			appKey: '',
+			appSecret: ''
+		},
+		pokebookFolderName: '',
+		serverUrl: '',
+		clientUrl: ''
 	}
 });
