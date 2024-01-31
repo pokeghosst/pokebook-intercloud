@@ -42,7 +42,7 @@ export const dropboxAuthClient = new DropboxAuth({
 
 export class DropboxClient {
 	public static async getAuthUrl() {
-		return await dropboxAuthClient.getAuthenticationUrl(
+		return (await dropboxAuthClient.getAuthenticationUrl(
 			`${useRuntimeConfig().clientUrl}/callback/dropbox`,
 			'',
 			'code',
@@ -50,7 +50,7 @@ export class DropboxClient {
 			[],
 			'none',
 			false
-		);
+		)) as string;
 	}
 	public static async processCallback(code: string) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -168,12 +168,10 @@ async function doAndRetryOnTimeout<T>(action: Promise<T>) {
 	let currentTry = 0;
 	while (currentTry < MAX_REQUEST_TRIES) {
 		try {
-			console.log(`trying... ${currentTry}`);
 			const result = await action;
 			return result;
 		} catch (e) {
 			if (e.code === 'ETIMEDOUT') {
-				console.log(`re-trying... ${currentTry}`);
 				currentTry++;
 				await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
 				// Welcome to Advanced Degeneracy Engineering

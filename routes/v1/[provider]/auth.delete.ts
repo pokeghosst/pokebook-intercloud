@@ -16,6 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { DropboxClient } from '../../../lib/client/DropboxClient';
 import { GoogleDriveClient } from '../../../lib/client/GoogleDriveClient';
 
 import { StorageProvider } from '../../../lib/enums/StorageProvider';
@@ -27,7 +28,7 @@ export default defineEventHandler(async (event) => {
 	try {
 		switch (provider) {
 			case StorageProvider.DROPBOX:
-			// return json(await DropboxClient.revokeTokenAndLogOut(refreshTokenId));
+				return await DropboxClient.revokeTokenAndLogOut(refreshTokenId);
 			case StorageProvider.GOOGLE: {
 				await GoogleDriveClient.revokeTokenAndLogOut(refreshTokenId);
 				return new Response('', { status: 200 });

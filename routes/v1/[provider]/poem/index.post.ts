@@ -21,6 +21,7 @@ import { GoogleDriveClient } from '../../../../lib/client/GoogleDriveClient';
 import { PoemEntity } from '../../../../lib/types/PoemEntity';
 
 import { StorageProvider } from '../../../../lib/enums/StorageProvider';
+import { DropboxClient } from '../../../../lib/client/DropboxClient';
 
 export default defineEventHandler(async (event) => {
 	const provider = getRouterParam(event, 'provider');
@@ -30,7 +31,7 @@ export default defineEventHandler(async (event) => {
 
 	switch (provider) {
 		case StorageProvider.DROPBOX:
-			// await DropboxClient.savePoem(accessToken, poem);
+			await DropboxClient.savePoem(accessToken, poem);
 			break;
 		case StorageProvider.GOOGLE: {
 			const pokebookFolderId = getQuery(event).pokebookFolderId as string;

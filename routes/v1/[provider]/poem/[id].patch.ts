@@ -21,24 +21,26 @@ import { GoogleDriveClient } from '../../../../lib/client/GoogleDriveClient';
 import { PoemEntity } from '../../../../lib/types/PoemEntity';
 
 import { StorageProvider } from '../../../../lib/enums/StorageProvider';
+import { DropboxClient } from '../../../../lib/client/DropboxClient';
 
 export default defineEventHandler(async (event) => {
 	const provider = getRouterParam(event, 'provider');
 	const poemId = getRouterParam(event, 'id');
 	const accessToken = getHeader(event, 'Authorization');
 	const poem = await readBody(event) as PoemEntity;
+	console.log(poem);
 
-	switch (provider) {
-		case StorageProvider.DROPBOX:
-			try {
-				// return json(await DropboxClient.updatePoem(accessToken, poemId, poem));
-			} catch (e) {
-				return new Response(null, { status: 500 });
+	try {
+		switch (provider) {
+			case StorageProvider.DROPBOX:
+				return await DropboxClient.updatePoem(accessToken, poemId, poem);
+			case StorageProvider.GOOGLE: {
+				return await GoogleDriveClient.updatePoem(accessToken, poemId, poem);
 			}
-		case StorageProvider.GOOGLE: {
-			return await GoogleDriveClient.updatePoem(accessToken, poemId, poem);
+			default:
+				return new Response(null, { status: 400 });
 		}
-		default:
-			return new Response(null, { status: 400 });
+	} catch (e) {
+		return new Response(null, { status: 500 });
 	}
 });

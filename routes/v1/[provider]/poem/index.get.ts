@@ -21,6 +21,7 @@ import { GoogleDriveClient } from '../../../../lib/client/GoogleDriveClient';
 import { PoemEntity } from '../../../../lib/types/PoemEntity';
 
 import { StorageProvider } from '../../../../lib/enums/StorageProvider';
+import { DropboxClient } from '../../../../lib/client/DropboxClient';
 
 const CACHE_MAX_AGE_SECONDS = 3600;
 
@@ -33,7 +34,7 @@ export default defineEventHandler(async (event) => {
 	switch (provider) {
 		case StorageProvider.DROPBOX:
 			try {
-				// return await DropboxClient.findAllPoems(accessToken);
+				return await DropboxClient.findAllPoems(accessToken);
 			} catch (e) {
 				return new Response(null, { status: 500 });
 			}
