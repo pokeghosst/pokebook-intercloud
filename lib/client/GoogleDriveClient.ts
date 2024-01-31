@@ -25,9 +25,9 @@ import { StorageProvider } from '../enums/StorageProvider';
 import type { PoemEntity } from '../types/PoemEntity';
 
 export const googleClient = new google.auth.OAuth2(
-	process.env.GOOGLE_CLIENT_ID,
-	process.env.GOOGLE_CLIENT_SECRET,
-	process.env.POKEBOOK_CLIENT_URL + `/callback/${StorageProvider.GOOGLE}`
+	useRuntimeConfig().google.clientId,
+	useRuntimeConfig().google.clientSecret,
+	useRuntimeConfig().clientUrl + `/callback/${StorageProvider.GOOGLE}`
 );
 
 export class GoogleDriveClient {
