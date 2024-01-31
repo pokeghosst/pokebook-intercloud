@@ -16,5 +16,14 @@ export default defineNitroConfig({
 		pokebookFolderName: '',
 		serverUrl: '',
 		clientUrl: ''
+	},
+	routeRules: {
+		'/**': {
+			cors: true,
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
+			}
+		}
 	}
 });
