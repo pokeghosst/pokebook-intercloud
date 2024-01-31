@@ -21,8 +21,7 @@ export default defineNitroConfig({
 		'/**': {
 			cors: true,
 			headers: {
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
+				'Access-Control-Allow-Origin': '*'
 			}
 		}
 	}
