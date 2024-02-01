@@ -27,15 +27,16 @@ export default defineEventHandler(async (event) => {
 	const provider = getRouterParam(event, 'provider');
 	const poemId = getRouterParam(event, 'id');
 	const accessToken = getHeader(event, 'Authorization');
-	const poem = await readBody(event) as PoemEntity;
-	console.log(poem);
+	const poem = (await readBody(event)) as PoemEntity;
 
 	try {
 		switch (provider) {
 			case StorageProvider.DROPBOX:
-				return await DropboxClient.updatePoem(accessToken, poemId, poem);
+				await DropboxClient.updatePoem(accessToken, poemId, poem);
+				return new Response(null, { status: 200 });
 			case StorageProvider.GOOGLE: {
-				return await GoogleDriveClient.updatePoem(accessToken, poemId, poem);
+				await GoogleDriveClient.updatePoem(accessToken, poemId, poem);
+				return new Response(null, { status: 200 });
 			}
 			default:
 				return new Response(null, { status: 400 });
