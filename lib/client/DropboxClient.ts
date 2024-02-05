@@ -16,7 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import RIPEMD160 from 'crypto-js/ripemd160';
+import { ripemd160 } from '@noble/hashes/ripemd160';
 import { Dropbox, DropboxAuth, type files } from 'dropbox';
 import { XMLBuilder } from 'fast-xml-parser';
 
@@ -63,7 +63,8 @@ export class DropboxClient {
 
 		if (!result.refresh_token) throw new Error('dropboxCantProcessAuthCode');
 
-		const refreshTokenId = RIPEMD160(result.refresh_token).toString();
+		const refreshTokenId = ripemd160(result.refresh_token).toString();
+
 		await useStorage('redis').setItem(
 			`${StorageProvider.DROPBOX}:${refreshTokenId}`,
 			result.refresh_token

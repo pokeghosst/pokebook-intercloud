@@ -16,7 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import RIPEMD160 from 'crypto-js/ripemd160.js';
+import { ripemd160 } from '@noble/hashes/ripemd160';
 import { XMLBuilder } from 'fast-xml-parser';
 import { google } from 'googleapis';
 
@@ -44,7 +44,7 @@ export class GoogleDriveClient {
 		let refreshTokenId;
 
 		if (tokens.refresh_token) {
-			refreshTokenId = RIPEMD160(tokens.refresh_token).toString();
+			refreshTokenId = ripemd160(tokens.refresh_token).toString();
 			await useStorage('redis').setItem(
 				`${StorageProvider.GOOGLE}:${refreshTokenId}`,
 				tokens.refresh_token
