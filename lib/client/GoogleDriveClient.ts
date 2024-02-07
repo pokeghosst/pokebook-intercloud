@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { ripemd160 } from '@noble/hashes/ripemd160';
+import { bytesToHex } from '@noble/hashes/utils';
 import { XMLBuilder } from 'fast-xml-parser';
 import { google } from 'googleapis';
 
@@ -44,7 +45,7 @@ export class GoogleDriveClient {
 		let refreshTokenId;
 
 		if (tokens.refresh_token) {
-			refreshTokenId = ripemd160(tokens.refresh_token).toString();
+			refreshTokenId = bytesToHex(ripemd160(tokens.refresh_token));
 			await useStorage('redis').setItem(
 				`${StorageProvider.GOOGLE}:${refreshTokenId}`,
 				tokens.refresh_token
@@ -87,9 +88,8 @@ export class GoogleDriveClient {
 		const drive = google.drive('v3');
 
 		const results = await drive.files.list({
-			q: `mimeType='application/vnd.google-apps.folder' and name='${
-				useRuntimeConfig().pokebookFolderName
-			}'`,
+			q: `mimeType='application/vnd.google-apps.folder' and name='${useRuntimeConfig().pokebookFolderName
+				}'`,
 			fields: 'files(id)',
 			auth: googleClient
 		});

@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { ripemd160 } from '@noble/hashes/ripemd160';
+import { bytesToHex } from '@noble/hashes/utils';
 import { Dropbox, DropboxAuth, type files } from 'dropbox';
 import { XMLBuilder } from 'fast-xml-parser';
 
@@ -63,7 +64,7 @@ export class DropboxClient {
 
 		if (!result.refresh_token) throw new Error('dropboxCantProcessAuthCode');
 
-		const refreshTokenId = ripemd160(result.refresh_token).toString();
+		const refreshTokenId = bytesToHex(ripemd160(result.refresh_token));
 
 		await useStorage('redis').setItem(
 			`${StorageProvider.DROPBOX}:${refreshTokenId}`,
