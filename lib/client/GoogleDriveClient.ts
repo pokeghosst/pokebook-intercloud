@@ -88,8 +88,9 @@ export class GoogleDriveClient {
 		const drive = google.drive('v3');
 
 		const results = await drive.files.list({
-			q: `mimeType='application/vnd.google-apps.folder' and name='${useRuntimeConfig().pokebookFolderName
-				}'`,
+			q: `mimeType='application/vnd.google-apps.folder' and name='${
+				useRuntimeConfig().pokebookFolderName
+			}'`,
 			fields: 'files(id)',
 			auth: googleClient
 		});
@@ -142,17 +143,21 @@ export class GoogleDriveClient {
 	public static async savePoem(accessToken: string, pokebookFolderId: string, poem: PoemEntity) {
 		googleClient.setCredentials({ access_token: accessToken });
 
-		await google.drive('v3').files.create({
-			auth: googleClient,
-			requestBody: {
-				name: `${poem.name}.xml`,
-				parents: [pokebookFolderId]
-			},
-			media: {
-				mimeType: 'text/xml',
-				body: new XMLBuilder({ format: true }).build(poem)
-			}
-		});
+		const { id } = (
+			await google.drive('v3').files.create({
+				auth: googleClient,
+				requestBody: {
+					name: `${poem.name}.xml`,
+					parents: [pokebookFolderId]
+				},
+				media: {
+					mimeType: 'text/xml',
+					body: new XMLBuilder({ format: true }).build(poem)
+				}
+			})
+		).data;
+
+		return id;
 	}
 	public static async updatePoem(accessToken: string, poemId: string, poem: PoemEntity) {
 		googleClient.setCredentials({ access_token: accessToken });

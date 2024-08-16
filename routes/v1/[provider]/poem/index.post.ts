@@ -35,8 +35,8 @@ export default defineEventHandler(async (event) => {
 			break;
 		case StorageProvider.GOOGLE: {
 			const pokebookFolderId = getQuery(event).pokebookFolderId as string;
-			await GoogleDriveClient.savePoem(accessToken, pokebookFolderId, poem);
-			break;
+			const id = await GoogleDriveClient.savePoem(accessToken, pokebookFolderId, poem);
+			return new Response(JSON.stringify({id}), { status: 200 });
 		}
 		default:
 			return new Response('', { status: 400 });
